@@ -1,10 +1,17 @@
 import "./style.css";
 import CategoryComponent from "../../components/category";
 import FeedComponent from "../../components/feed";
+import EmptyStateComponent from "../../components/empty";
+//TODO:
+// - Loop the data by using .map method (v)
+// - Highlight the breaking news category (v)
+// - Show Empty State if the data is empty (v)
+// - Create simple isLoggedIn function and greet the user (same as slide) (v)
 
 const NewsFeedPage = () => {
   const data = [
     {
+      id: "123",
       category: "Breaking News",
       title: "Viral!! Pasukan ibu-ibu serbu minyak goreng di supermarket mini",
       description:
@@ -15,6 +22,7 @@ const NewsFeedPage = () => {
       date: "19-03-2022",
     },
     {
+      id: "312",
       category: "Trending",
       title: "Heran?! Ongkang-ongkang kaki dapat RP121 Juta",
       description:
@@ -25,6 +33,7 @@ const NewsFeedPage = () => {
       date: "19-02-2022",
     },
     {
+      id: "423",
       category: "Top Rated",
       title: "Lagu ampun bang Jago mendadak viral di Tiktok",
       description:
@@ -36,32 +45,27 @@ const NewsFeedPage = () => {
     },
   ];
 
-  const firstData = data[0];
-  const secondData = data[1];
-  const thirdData = data[2];
+  if (data.length == 0) {
+    return <EmptyStateComponent />;
+  }
+  //Todo: will be replace by API user data call
+  const isLoggedIn = true;
+
+  const title = isLoggedIn ? "Welcome Back Rudi!" : "Welcome Stranger!";
 
   return (
     <div className="container">
       <div className="feeds">
-        <h1 className="feeds__title">Today News!</h1>
-        <CategoryComponent category={firstData.category}>
-          <FeedComponent
-            title={firstData.title}
-            date={firstData.date}
-            description={firstData.description}
-            source={firstData.source}
-            image={firstData.image}
-          />
-        </CategoryComponent>
-
-        <CategoryComponent category={secondData.category}>
-          <FeedComponent {...secondData} />
-        </CategoryComponent>
-
-        <CategoryComponent
-          category={thirdData.category}
-          children={<FeedComponent {...thirdData} />}
-        />
+        <h1 className="feeds__title">{title} Today News!</h1>
+        {data.map((feed, index) => (
+          <CategoryComponent
+            key={feed.id}
+            category={feed.category}
+            isHighlighted={feed.category === "Breaking News"}
+          >
+            <FeedComponent title="Hello WOrld" {...feed} />
+          </CategoryComponent>
+        ))}
       </div>
     </div>
   );
